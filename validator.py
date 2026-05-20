@@ -54,12 +54,12 @@ def check_division_sign(text: str):
 
 def check_operators(text: str):
     """Проверяет корректность расположения арифметических операторов"""
-    if text and text[0] in '/^':
+    if text and text[0] in '/^*':
         raise ValueError("Выражение не может начинаться с / или ^")
-    if text and text[-1] in '+-/^':
+    if text and text[-1] in '+-/^*':
         raise ValueError("Выражение не может заканчиваться оператором")
     for i in range(len(text) - 1):
-        if text[i] in '+-/^' and text[i + 1] in '+-/^':
+        if text[i] in '+-/^*' and text[i + 1] in '+-/^*':
             raise ValueError(f"Два оператора подряд: '{text[i]}{text[i + 1]}'")
 
 

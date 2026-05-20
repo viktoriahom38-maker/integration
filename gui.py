@@ -1,5 +1,5 @@
 """
-GUI конструктор для ввода математических выражений
+Графический интерфейс для ввода математических выражений
 Запуск: python gui.py
 """
 
@@ -10,7 +10,19 @@ from formatter import format_output
 
 
 class MathExpressionBuilder:
+    """
+    Главный класс графического интерфейса
+
+    root - главное окно tkinter
+    variable - текущая переменная интегрирования
+    expression - текущее выражение
+    expression_var - строковая переменная tkinter для поля ввода
+    """
+
     def __init__(self):
+        """
+        Инициализирует главное окно и все компоненты
+        """
         self.root = tk.Tk()
         self.root.title("Интегратор функций")
         self.root.geometry("850x750")
@@ -24,6 +36,9 @@ class MathExpressionBuilder:
         self.update_variable_buttons()
 
     def setup_ui(self):
+        """
+        Создаёт и размещает все элементы графического интерфейса
+        """
         main_frame = ttk.Frame(self.root, padding="15")
         main_frame.pack(fill=tk.BOTH, expand=True)
 
@@ -105,24 +120,43 @@ class MathExpressionBuilder:
         ttk.Button(control_frame, text="Удалить один", command=self.backspace, width=15).pack(side=tk.LEFT, padx=5)
 
     def on_entry_change(self, event):
+        """
+        Обрабатывает изменение текста в поле ввода
+
+        event - событие изменения
+        """
         self.expression = self.expression_var.get()
 
     def add_text(self, text):
+        """
+        Добавляет текст в поле ввода
+
+        text - добавляемый текст
+        """
         current = self.expression_var.get()
         self.expression_var.set(current + text)
         self.expression = current + text
 
     def clear(self):
+        """
+        Очищает поле ввода и результат
+        """
         self.expression_var.set("")
         self.expression = ""
         self.result_text.delete(1.0, tk.END)
 
     def backspace(self):
+        """
+        Удаляет последний символ из поля ввода
+        """
         current = self.expression_var.get()
         self.expression_var.set(current[:-1])
         self.expression = current[:-1]
 
     def update_variable(self):
+        """
+        Обновляет переменную интегрирования
+        """
         new_var = self.variable.get()
         if not new_var or len(new_var) != 1 or not new_var.isalpha():
             messagebox.showerror("Ошибка", "Переменная должна быть одной буквой")
@@ -131,10 +165,16 @@ class MathExpressionBuilder:
         self.update_variable_buttons()
 
     def update_variable_buttons(self):
+        """
+        Обновляет кнопки с переменной
+        """
         var = self.variable.get()
         self.var_btn.config(text=var, command=lambda: self.add_text(var))
 
     def calculate_integral(self):
+        """
+        Вычисляет интеграл и выводит результат
+        """
         expression = self.expression_var.get()
         if not expression:
             messagebox.showwarning("Предупреждение", "Введите выражение")
@@ -150,6 +190,9 @@ class MathExpressionBuilder:
             messagebox.showerror("Ошибка", str(e))
 
     def run(self):
+        """
+        Запускает главный цикл приложения
+        """
         self.root.mainloop()
 
 

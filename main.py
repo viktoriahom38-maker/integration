@@ -1,10 +1,17 @@
+"""
+Консольный интерфейс для интегрирования математических выражений
+"""
+
 from integration import integrate
 from formatter import format_output
 
+
 def start():
-    """Запускает интерактивный цикл программы интегрирования"""
+    """
+    Запускает интерактивный цикл программы интегрирования
+    """
     try:
-        variable = input("Введите букву переменной (например, x): ").strip()
+        variable = input("Введите переменную интегрирования (например, x): ").strip()
         if not variable or len(variable) != 1 or not variable.isalpha():
             print("Ошибка: Переменная должна быть одной буквой латинского алфавита.")
             return
@@ -25,6 +32,7 @@ def start():
 
     except KeyboardInterrupt:
         print("\nПрограмма завершена.")
+
 
 if __name__ == "__main__":
     start()

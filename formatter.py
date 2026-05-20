@@ -179,7 +179,7 @@ def _log_to_string(coef: Fraction, arg: str):
     else:
         c_part = f"{abs_n}/{abs_d}"
 
-    if c_part == "" or c_part == "-":
+    if c_part == "" or c_part == "-" or c_part == 1:
         return f"{sign}ln|{arg}|"
     else:
         return f"{sign}{c_part}*ln|{arg}|"

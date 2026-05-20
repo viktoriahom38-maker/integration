@@ -21,6 +21,7 @@ def preprocess(expression: str, variable: str):
     expr = re.sub(r'\)(' + var + r')', r')*\1', expr)
     expr = re.sub(r'\)\(', r')*(', expr)
     expr = re.sub(r'\)(\d)', r')*\1', expr)
+    expr = re.sub(r'(\d)\(', r'\1*(', expr)
     return expr
 
 
