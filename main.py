@@ -1,5 +1,3 @@
-from validator import validate
-from parser import preprocess, parse_to_polynomials
 from integration import integrate
 from formatter import format_output
 
@@ -15,14 +13,11 @@ def start():
 
         while True:
             try:
-                expression = input("Введите рациональную функцию: ").strip()
+                expression = input("Введите функцию: ").strip()
                 if not expression:
                     continue
 
-                processed = preprocess(expression, variable)
-                validate(processed, variable)
-                num, den = parse_to_polynomials(processed, variable)
-                result = integrate(num, den, variable)
+                result = integrate(expression, variable)
                 print(format_output(expression, result, variable))
 
             except Exception as e:

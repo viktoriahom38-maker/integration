@@ -4,38 +4,82 @@ from fraction import Fraction
 
 def format_output(original_expr: str, result, variable: str):
     """
-    Формирует итоговую строку вывода интеграла для успешных результатов
+    Формирует итоговую строку вывода интеграла
 
     original_expr - исходное выражение пользователя
     result - результат интегрирования
     variable - переменная интегрирования
 
-    форматированная строка
+    возвращает форматированную строку
     """
+    if isinstance(result, str):
+        if "Ошибка" in result or "не интегрируется" in result:
+            return f"∫ ({original_expr}) d{variable} = {result}"
+        return f"∫ ({original_expr}) d{variable} = {result} + C"
+
     poly_terms, log_terms = result
+
+    if isinstance(poly_terms, list) and len(poly_terms) > 0 and isinstance(poly_terms[0], tuple):
+        if len(poly_terms[0]) == 2 and isinstance(poly_terms[0][1], int):
+            result_str = format_integral_result(poly_terms, log_terms, variable)
+            return f"∫ ({original_expr}) d{variable} = {result_str} + C"
 
     if not poly_terms and not log_terms:
         return f"∫ ({original_expr}) d{variable} = 0 + C"
 
-    result_str = format_integral_result(poly_terms, log_terms, variable)
-
+    result_str = format_elementary_result(poly_terms, log_terms, variable)
     return f"∫ ({original_expr}) d{variable} = {result_str} + C"
 
 
-def format_integral_result(terms: List[Tuple[Fraction, int]],
-                           log_terms: List[Tuple[Fraction, str]],
-                           variable: str):
-    """
-    Преобразует списки членов результата в единую строку
-
-    terms - список кортежей (коэффициент, степень) для полиномиальной части
-    log_terms - список кортежей (коэффициент, аргумент) для логарифмической части
-    variable - переменная
-
-    строка математического выражения
-    """
+def format_elementary_result(terms: list, log_terms: list, variable: str):
+    """Форматирует результат для элементарных функций"""
     parts = []
+    for coef, func in terms:
+        if isinstance(coef, Fraction):
+            if coef.numerator == 1 and coef.denominator == 1:
+                coef_str = ""
+            elif coef.numerator == -1 and coef.denominator == 1:
+                coef_str = "-"
+            else:
+                coef_str = str(coef)
+        else:
+            if coef == 1:
+                coef_str = ""
+            elif coef == -1:
+                coef_str = "-"
+            else:
+                coef_str = str(coef)
+        parts.append(f"{coef_str}{func}")
+    for coef, arg in log_terms:
+        if isinstance(coef, Fraction):
+            if coef.numerator == 1 and coef.denominator == 1:
+                coef_str = ""
+            elif coef.numerator == -1 and coef.denominator == 1:
+                coef_str = "-"
+            else:
+                coef_str = str(coef)
+        else:
+            if coef == 1:
+                coef_str = ""
+            elif coef == -1:
+                coef_str = "-"
+            else:
+                coef_str = str(coef)
+        parts.append(f"{coef_str}ln|{arg}|")
+    if not parts:
+        return "0"
+    result = parts[0]
+    for p in parts[1:]:
+        if p.startswith('-'):
+            result += " " + p
+        else:
+            result += " + " + p
+    return result
 
+
+def format_integral_result(terms: List[Tuple[Fraction, int]], log_terms: List[Tuple[Fraction, str]], variable: str):
+    """Преобразует списки членов результата в единую строку"""
+    parts = []
     terms.sort(key=lambda x: x[1], reverse=True)
 
     for coef, degree in terms:
@@ -69,7 +113,7 @@ def format_linear_expression(a: Fraction, b: Fraction, var: str):
     b - свободный член
     var - переменная
 
-    Строка вида "x", "2x+1", т.д.
+    возвращает строку вида "x", "2x+1", т.д.
     """
     if a.numerator == 0:
         return str(b)

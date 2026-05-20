@@ -1,17 +1,44 @@
 from polynomial import Polynomial
 from fraction import Fraction
 from formatter import format_linear_expression
+from function_integrator import FunctionIntegrator
+from function_parser import is_elementary_function
+from parser import preprocess, parse_to_polynomials
+from validator import validate
 
 
-def integrate(numerator: Polynomial, denominator: Polynomial, variable: str):
+def integrate(expression: str, variable: str):
     """
-    Главная функция интегрирования рациональной функции P(x)/Q(x)
+    Главная функция интегрирования
 
-    numerator числитель
-    denominator знаменатель
-    variable переменная
+    expression - строковое выражение
+    variable - переменная
 
-    tuple кортеж (list_poly_terms, list_log_terms) для форматирования
+    возвращает результат интегрирования (строку или кортеж)
+    """
+
+    if is_elementary_function(expression, variable):
+        integrator = FunctionIntegrator(expression, variable)
+        result = integrator.integrate()
+        if result is not None:
+            return result
+
+
+    processed = preprocess(expression, variable)
+    validate(processed, variable)
+    num, den = parse_to_polynomials(processed, variable)
+    return integrate_rational(num, den, variable)
+
+
+def integrate_rational(numerator: Polynomial, denominator: Polynomial, variable: str):
+    """
+    Интегрирует рациональную функцию P(x)/Q(x)
+
+    numerator - числитель
+    denominator - знаменатель
+    variable - переменная
+
+    возвращает кортеж (poly_terms, log_terms) или строку с ошибкой
     """
     if denominator.is_zero():
         return "Ошибка: знаменатель не может быть равен нулю"
@@ -30,17 +57,58 @@ def integrate(numerator: Polynomial, denominator: Polynomial, variable: str):
             new_num.add_term(deg, coef / const)
         return integrate_polynomial(new_num, variable)
 
-    return integrate_rational(numerator, denominator, variable)
+    if denom_deg == 1:
+        return integrate_rational_fraction(numerator, denominator, variable)
+
+    if denom_deg == 2:
+        return integrate_quadratic_denominator(numerator, denominator, variable)
+
+    return integrate_rational_fraction(numerator, denominator, variable)
+
+
+def integrate_quadratic_denominator(numerator: Polynomial, denominator: Polynomial, variable: str):
+    """
+    Интегрирует дроби с квадратным знаменателем
+
+    numerator - числитель
+    denominator - знаменатель степени 2
+    variable - переменная
+
+    возвращает кортеж (poly_terms, log_terms)
+    """
+    if numerator.degree() > 0:
+        return "Эта функция не интегрируется в рамках задачи на данный момент"
+
+    const = numerator.coefficient(0)
+    a = denominator.coefficient(2)
+    b = denominator.coefficient(1)
+    c = denominator.coefficient(0)
+
+    if b.numerator != 0:
+        return "Эта функция не интегрируется в рамках задачи на данный момент"
+
+    a_val = a.numerator / a.denominator
+    c_val = c.numerator / c.denominator
+
+    if c_val > 0:
+        a_sqrt = (c_val ** 0.5)
+        if a_sqrt == 1:
+            return ([], [(Fraction(1, 1), f"arctg({variable})")])
+        else:
+            coef = Fraction(1, int(a_sqrt * a_val))
+            return ([], [(coef, f"arctg({variable}/{int(a_sqrt)})")])
+
+    return "Эта функция не интегрируется в рамках задачи на данный момент"
 
 
 def integrate_polynomial(poly: Polynomial, variable: str):
     """
-    Интегрирует многочлен по степенному правилу ∫ x^n dx = x^(n+1)/(n+1)
+    Интегрирует многочлен по степенному правилу
 
     poly - многочлен для интегрирования
     variable - переменная
 
-    tuple: (list_of_tuples_coeffs_degs, empty_list_for_logs)
+    возвращает (list_poly_terms, empty_list)
     """
     if poly.is_zero():
         return [], []
@@ -53,16 +121,15 @@ def integrate_polynomial(poly: Polynomial, variable: str):
     return result_terms, []
 
 
-def integrate_rational(numerator: Polynomial, denominator: Polynomial, variable: str):
+def integrate_rational_fraction(numerator: Polynomial, denominator: Polynomial, variable: str):
     """
     Интегрирует правильную рациональную дробь через деление многочленов
-    (x^2 + 1)/(x) -> x + 1/x -> 1/2x^2 + ln|x| + C
 
     numerator - числитель
     denominator - знаменатель
     variable - переменная
 
-    tuple: (list_poly_terms, list_log_terms)
+    возвращает (list_poly_terms, list_log_terms)
     """
     quotient, remainder = numerator.divide_with_remainder(denominator)
 
@@ -89,7 +156,7 @@ def integrate_linear_denominator(numerator: Polynomial, denominator: Polynomial,
     denominator - линейный знаменатель
     variable - переменная
 
-    tuple: (coefficient_fraction, argument_string) для логарифма, или None
+    возвращает (coef, arg) для логарифма или None
     """
     a = denominator.coefficient(1)
     b = denominator.coefficient(0)
