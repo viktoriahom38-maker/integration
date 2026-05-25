@@ -22,7 +22,8 @@ class Fraction:
 
     def simplify(self) -> None:
         """
-        Сокращает дробь до несократимого вида и нормализует знак (хранится в числителе)
+        Сокращает дробь до несократимого вида и
+        нормализует знак (хранится в числителе)
         """
         g = gcd(abs(self.numerator), abs(self.denominator))
         self.numerator //= g
@@ -36,7 +37,8 @@ class Fraction:
         if isinstance(other, int):
             other = Fraction(other, 1)
         return Fraction(
-            self.numerator * other.denominator + other.numerator * self.denominator,
+            self.numerator * other.denominator +
+                    other.numerator * self.denominator,
             self.denominator * other.denominator
         )
 
@@ -45,7 +47,8 @@ class Fraction:
         if isinstance(other, int):
             other = Fraction(other, 1)
         return Fraction(
-            self.numerator * other.denominator - other.numerator * self.denominator,
+            self.numerator * other.denominator -
+                    other.numerator * self.denominator,
             self.denominator * other.denominator
         )
 
@@ -71,7 +74,8 @@ class Fraction:
         """Проверка равенства двух дробей"""
         if isinstance(other, int):
             other = Fraction(other, 1)
-        return self.numerator == other.numerator and self.denominator == other.denominator
+        return (self.numerator == other.numerator and
+                    self.denominator == other.denominator)
 
     def __repr__(self) -> str:
         """Строковое представление дроби"""
@@ -79,3 +83,7 @@ class Fraction:
             return str(self.numerator)
         else:
             return f"{self.numerator}/{self.denominator}"
+
+    def __neg__(self) -> 'Fraction':
+        """Унарный минус"""
+        return Fraction(-self.numerator, self.denominator)

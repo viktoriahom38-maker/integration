@@ -34,7 +34,7 @@ class Polynomial:
         coefficient - коэффициент при переменной
         """
         if not isinstance(degree, int):
-            raise TypeError(f"Степень должна быть int, получено {type(degree)}")
+            raise TypeError(f"Степень не int, получено {type(degree)}")
 
         if isinstance(coefficient, Fraction):
             f = coefficient
@@ -90,7 +90,8 @@ class Polynomial:
 
         divisor - делитель
 
-        tuple - кортеж (частное, остаток), где оба элемента — объекты Polynomial
+        tuple - кортеж (частное, остаток),
+        где оба элемента — объекты Polynomial
         """
         if divisor.is_zero():
             raise ValueError("Деление на нулевой многочлен")

@@ -24,14 +24,14 @@ def integrate(expression: str, variable: str) -> Union[str, Tuple[List, List]]:
         if result is not None:
             return result
 
-
     processed = preprocess(expression, variable)
     validate(processed, variable)
     num, den = parse_to_polynomials(processed, variable)
     return integrate_rational(num, den, variable)
 
 
-def integrate_rational(numerator: Polynomial, denominator: Polynomial, variable: str) -> Union[str, Tuple[List, List]]:
+def integrate_rational(numerator: Polynomial, denominator: Polynomial,
+                       variable: str) -> Union[str, Tuple[List, List]]:
     """
     Интегрирует рациональную функцию P(x)/Q(x)
 
@@ -62,12 +62,15 @@ def integrate_rational(numerator: Polynomial, denominator: Polynomial, variable:
         return integrate_rational_fraction(numerator, denominator, variable)
 
     if denom_deg == 2:
-        return integrate_quadratic_denominator(numerator, denominator, variable)
+        return integrate_quadratic_denominator(numerator,
+                                               denominator, variable)
 
     return integrate_rational_fraction(numerator, denominator, variable)
 
 
-def integrate_quadratic_denominator(numerator: Polynomial, denominator: Polynomial, variable: str) -> Union[str, Tuple[List, List]]:
+def integrate_quadratic_denominator(
+        numerator: Polynomial, denominator: Polynomial, variable: str) -> (
+                Union)[str, Tuple[List, List]]:
     """
     Интегрирует дроби с квадратным знаменателем
 
@@ -122,7 +125,8 @@ def integrate_polynomial(poly: Polynomial, variable: str) -> Tuple[List, List]:
     return result_terms, []
 
 
-def integrate_rational_fraction(numerator: Polynomial, denominator: Polynomial, variable: str) -> Tuple[List, List]:
+def integrate_rational_fraction(numerator: Polynomial,
+                denominator: Polynomial, variable: str) -> Tuple[List, List]:
     """
     Интегрирует правильную рациональную дробь через деление многочленов
 
@@ -149,7 +153,9 @@ def integrate_rational_fraction(numerator: Polynomial, denominator: Polynomial, 
     return poly_terms, log_terms
 
 
-def integrate_linear_denominator(numerator: Polynomial, denominator: Polynomial, variable: str) -> Union[Tuple[Fraction, str], None]:
+def integrate_linear_denominator(numerator: Polynomial,
+        denominator: Polynomial, variable: str) -> (
+            Union)[Tuple[Fraction, str], None]:
     """
     Интегрирует выражение вида Const / (ax + b)
 
