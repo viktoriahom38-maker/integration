@@ -6,11 +6,19 @@ import re
 
 
 class FunctionIntegrator:
-    def __init__(self, expr: str, var: str):
+    """
+    Класс для интегрирования элементарных функций
+
+    выполняет интегрирование стандартных математических функций,
+    таких как степенные, тригонометрические, экспоненциальные и логарифмические
+    """
+    def __init__(self, expr: str, var: str) -> None:
+        """Инициализирует интегратор элементарных функций"""
         self.expr = expr
         self.var = var
 
-    def integrate(self):
+    def integrate(self) -> str | None:
+        """Выполняет интегрирование элементарной функции"""
         expr = self.expr.strip()
         var = self.var
 

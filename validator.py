@@ -1,7 +1,7 @@
 import re
 
 
-def validate(expression: str, variable: str):
+def validate(expression: str, variable: str) -> None:
     """
     Выполняет комплексную проверку корректности входного выражения
 
@@ -16,7 +16,7 @@ def validate(expression: str, variable: str):
     check_no_negative_powers(expression, variable)
 
 
-def check_symbols(text: str, variable: str):
+def check_symbols(text: str, variable: str) -> None:
     """Проверяет наличие только разрешенных символов"""
     func_names = ['sin', 'cos', 'tg', 'ctg', 'arcsin', 'arctg', 'ln', 'sqrt']
     allowed_chars = set('0123456789+-*/^()' + variable)
@@ -34,7 +34,7 @@ def check_symbols(text: str, variable: str):
             raise ValueError(f"Недопустимое имя функции: '{word}'")
 
 
-def check_brackets(text: str):
+def check_brackets(text: str) -> None:
     """Проверяет баланс открывающих и закрывающих скобок"""
     balance = 0
     for ch in text:
@@ -46,13 +46,13 @@ def check_brackets(text: str):
         raise ValueError("Проверьте баланс открывающих и закрывающих скобок")
 
 
-def check_division_sign(text: str):
+def check_division_sign(text: str) -> None:
     """Запрещает более одного знака деления"""
     if text.count('/') > 1:
         raise ValueError("Более одного знака деления")
 
 
-def check_operators(text: str):
+def check_operators(text: str) -> None:
     """Проверяет корректность расположения арифметических операторов"""
     if text and text[0] in '/^*':
         raise ValueError("Выражение не может начинаться с / или ^")
@@ -63,13 +63,13 @@ def check_operators(text: str):
             raise ValueError(f"Два оператора подряд: '{text[i]}{text[i + 1]}'")
 
 
-def check_no_decimals(text: str):
+def check_no_decimals(text: str) -> None:
     """Запрещает использование десятичных дробей"""
     if re.search(r'\d+[.,]\d+', text):
         raise ValueError("Десятичные дроби не поддерживаются")
 
 
-def check_no_negative_powers(text: str, variable: str):
+def check_no_negative_powers(text: str, variable: str) -> None:
     """Запрещает отрицательные степени, но пропускает e^(2x)"""
     if re.search(r'e\^\(', text):
         return

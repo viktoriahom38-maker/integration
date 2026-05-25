@@ -5,7 +5,7 @@
 import re
 
 
-def is_elementary_function(expression: str, variable: str):
+def is_elementary_function(expression: str, variable: str) -> bool:
     """
     Проверяет, можно ли интегрировать выражение как элементарную функцию
 

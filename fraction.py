@@ -7,7 +7,7 @@ class Fraction:
     поддерживает арифметические операции и автоматическое сокращение
     """
 
-    def __init__(self, numerator, denominator=1):
+    def __init__(self, numerator: int, denominator: int = 1) -> None:
         """
         Инициализирует дробь числителем и знаменателем
 
@@ -20,7 +20,7 @@ class Fraction:
             raise ValueError("Знаменатель не может быть нулём")
         self.simplify()
 
-    def simplify(self):
+    def simplify(self) -> None:
         """
         Сокращает дробь до несократимого вида и нормализует знак (хранится в числителе)
         """
@@ -31,7 +31,7 @@ class Fraction:
             self.numerator = -self.numerator
             self.denominator = -self.denominator
 
-    def __add__(self, other):
+    def __add__(self, other: 'Fraction | int') -> 'Fraction':
         """Сложение дробей"""
         if isinstance(other, int):
             other = Fraction(other, 1)
@@ -40,7 +40,7 @@ class Fraction:
             self.denominator * other.denominator
         )
 
-    def __sub__(self, other):
+    def __sub__(self, other: 'Fraction | int') -> 'Fraction':
         """Вычитание дробей"""
         if isinstance(other, int):
             other = Fraction(other, 1)
@@ -49,7 +49,7 @@ class Fraction:
             self.denominator * other.denominator
         )
 
-    def __mul__(self, other):
+    def __mul__(self, other: 'Fraction | int') -> 'Fraction':
         """Умножение дробей"""
         if isinstance(other, int):
             other = Fraction(other, 1)
@@ -58,7 +58,7 @@ class Fraction:
             self.denominator * other.denominator
         )
 
-    def __truediv__(self, other):
+    def __truediv__(self, other: 'Fraction | int') -> 'Fraction':
         """Деление дробей"""
         if isinstance(other, int):
             other = Fraction(other, 1)
@@ -67,13 +67,13 @@ class Fraction:
             self.denominator * other.numerator
         )
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'Fraction | int') -> bool:
         """Проверка равенства двух дробей"""
         if isinstance(other, int):
             other = Fraction(other, 1)
         return self.numerator == other.numerator and self.denominator == other.denominator
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Строковое представление дроби"""
         if self.denominator == 1:
             return str(self.numerator)

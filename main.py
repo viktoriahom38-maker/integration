@@ -6,7 +6,7 @@ from integration import integrate
 from formatter import format_output
 
 
-def start():
+def start() -> None:
     """
     Запускает интерактивный цикл программы интегрирования
     """

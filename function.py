@@ -10,7 +10,7 @@ class Function:
     Представляет элементарную функцию: sin, cos, tg, ctg, arcsin, arctg, ln, exp, sqrt, степень
     """
 
-    def __init__(self, name: str, argument, coefficient: Fraction = Fraction(1, 1)):
+    def __init__(self, name: str, argument, coefficient: Fraction = Fraction(1, 1)) -> None:
         """
         Создаёт функцию
 
@@ -22,11 +22,11 @@ class Function:
         self.argument = argument
         self.coefficient = coefficient
 
-    def copy(self):
+    def copy(self) -> 'Function':
         """Создаёт копию функции"""
         return Function(self.name, self.argument, self.coefficient)
 
-    def __mul__(self, other):
+    def __mul__(self, other: 'Function | int | Fraction') -> 'Function | ProductFunction':
         """Умножение функции на число или другую функцию"""
         if isinstance(other, (int, Fraction)):
             new_coef = self.coefficient * other
@@ -35,25 +35,25 @@ class Function:
             return ProductFunction(self, other)
         return ProductFunction(self, other)
 
-    def __rmul__(self, other):
+    def __rmul__(self, other: 'Function | int | Fraction') -> 'Function | ProductFunction':
         """Умножение числа на функцию"""
         return self.__mul__(other)
 
-    def __add__(self, other):
+    def __add__(self, other: 'Function | int | Fraction') -> 'Function | SumFunction':
         """Сложение функций"""
         if isinstance(other, (int, Fraction)) and other == 0:
             return self
         return SumFunction(self, other)
 
-    def __sub__(self, other):
+    def __sub__(self, other: 'Function | int | Fraction') -> 'SumFunction':
         """Вычитание функций"""
         return SumFunction(self, NegateFunction(other))
 
-    def __neg__(self):
+    def __neg__(self) -> 'Function':
         """Унарный минус"""
         return Function(self.name, self.argument, -self.coefficient)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Строковое представление"""
         if self.coefficient.numerator == 0:
             return "0"
@@ -87,11 +87,13 @@ class Function:
 class SumFunction:
     """Сумма функций"""
 
-    def __init__(self, left, right):
+    def __init__(self, left, right) -> None:
+        """Создаёт объект суммы функций"""
         self.left = left
         self.right = right
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """Строковое представление суммы функций"""
         left_str = str(self.left)
         right_str = str(self.right)
 
@@ -104,11 +106,13 @@ class SumFunction:
 class ProductFunction:
     """Произведение функций"""
 
-    def __init__(self, left, right):
+    def __init__(self, left, right) -> None:
+        """Создаёт объект произведения функций"""
         self.left = left
         self.right = right
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """Строковое представление произведения функций"""
         left_str = str(self.left)
         right_str = str(self.right)
 
@@ -124,8 +128,10 @@ class ProductFunction:
 class NegateFunction:
     """Отрицательная функция"""
 
-    def __init__(self, func):
+    def __init__(self, func) -> None:
+        """Создаёт объект отрицательной функции"""
         self.func = func
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """Строковое представление отрицательной функции"""
         return f"-{self.func}"

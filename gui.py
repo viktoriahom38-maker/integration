@@ -19,7 +19,7 @@ class MathExpressionBuilder:
     expression_var - строковая переменная tkinter для поля ввода
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Инициализирует главное окно и все компоненты
         """
@@ -35,7 +35,7 @@ class MathExpressionBuilder:
         self.setup_ui()
         self.update_variable_buttons()
 
-    def setup_ui(self):
+    def setup_ui(self) -> None:
         """
         Создаёт и размещает все элементы графического интерфейса
         """
@@ -119,7 +119,7 @@ class MathExpressionBuilder:
         ttk.Button(control_frame, text="Очистить все", command=self.clear, width=15).pack(side=tk.LEFT, padx=5)
         ttk.Button(control_frame, text="Удалить один", command=self.backspace, width=15).pack(side=tk.LEFT, padx=5)
 
-    def on_entry_change(self, event):
+    def on_entry_change(self, event) -> None:
         """
         Обрабатывает изменение текста в поле ввода
 
@@ -127,7 +127,7 @@ class MathExpressionBuilder:
         """
         self.expression = self.expression_var.get()
 
-    def add_text(self, text):
+    def add_text(self, text: str) -> None:
         """
         Добавляет текст в поле ввода
 
@@ -137,7 +137,7 @@ class MathExpressionBuilder:
         self.expression_var.set(current + text)
         self.expression = current + text
 
-    def clear(self):
+    def clear(self) -> None:
         """
         Очищает поле ввода и результат
         """
@@ -145,7 +145,7 @@ class MathExpressionBuilder:
         self.expression = ""
         self.result_text.delete(1.0, tk.END)
 
-    def backspace(self):
+    def backspace(self) -> None:
         """
         Удаляет последний символ из поля ввода
         """
@@ -153,7 +153,7 @@ class MathExpressionBuilder:
         self.expression_var.set(current[:-1])
         self.expression = current[:-1]
 
-    def update_variable(self):
+    def update_variable(self) -> None:
         """
         Обновляет переменную интегрирования
         """
@@ -164,14 +164,14 @@ class MathExpressionBuilder:
             return
         self.update_variable_buttons()
 
-    def update_variable_buttons(self):
+    def update_variable_buttons(self) -> None:
         """
         Обновляет кнопки с переменной
         """
         var = self.variable.get()
         self.var_btn.config(text=var, command=lambda: self.add_text(var))
 
-    def calculate_integral(self):
+    def calculate_integral(self) -> None:
         """
         Вычисляет интеграл и выводит результат
         """
@@ -189,7 +189,7 @@ class MathExpressionBuilder:
         except Exception as e:
             messagebox.showerror("Ошибка", str(e))
 
-    def run(self):
+    def run(self) -> None:
         """
         Запускает главный цикл приложения
         """

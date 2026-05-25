@@ -8,7 +8,7 @@ class Polynomial:
     Многочлен хранится как словарь {степень: коэффициент}
     """
 
-    def __init__(self, terms: Dict[int, int | Fraction] = None):
+    def __init__(self, terms: Dict[int, int | Fraction] = None) -> None:
         """
         Инициализирует многочлен списком членов
 
@@ -25,7 +25,7 @@ class Polynomial:
                 if f.numerator != 0:
                     self.terms[int(deg)] = f
 
-    def add_term(self, degree: int, coefficient: int | Fraction):
+    def add_term(self, degree: int, coefficient: int | Fraction) -> None:
         """
         Добавляет член к многочлену
         Если член с такой степенью уже есть, коэффициенты суммируются
@@ -52,7 +52,7 @@ class Polynomial:
         if self.terms[degree].numerator == 0:
             del self.terms[degree]
 
-    def degree(self):
+    def degree(self) -> int:
         """
         Возвращает старшую степень многочлена
 
@@ -63,7 +63,7 @@ class Polynomial:
         else:
             return -1
 
-    def coefficient(self, degree: int):
+    def coefficient(self, degree: int) -> Fraction:
         """
         Возвращает коэффициент при заданной степени
 
@@ -76,7 +76,7 @@ class Polynomial:
         else:
             return Fraction(0, 1)
 
-    def is_zero(self):
+    def is_zero(self) -> bool:
         """
         Проверяет, является ли многочлен нулевым
 
@@ -84,7 +84,7 @@ class Polynomial:
         """
         return len(self.terms) == 0
 
-    def divide_with_remainder(self, divisor):
+    def divide_with_remainder(self, divisor: 'Polynomial') -> tuple:
         """
         Выполняет деление многочлена с остатком
 
@@ -107,7 +107,7 @@ class Polynomial:
 
         return quotient, dividend
 
-    def __mul__(self, other):
+    def __mul__(self, other: 'Polynomial') -> 'Polynomial':
         """Умножение двух многочленов"""
         result = Polynomial()
         for deg1, coef1 in self.terms.items():
@@ -115,14 +115,14 @@ class Polynomial:
                 result.add_term(deg1 + deg2, coef1 * coef2)
         return result
 
-    def __add__(self, other):
+    def __add__(self, other: 'Polynomial') -> 'Polynomial':
         """Сложение двух многочленов"""
         result = Polynomial(self.terms.copy())
         for deg, coef in other.terms.items():
             result.add_term(deg, coef)
         return result
 
-    def __sub__(self, other):
+    def __sub__(self, other: 'Polynomial') -> 'Polynomial':
         """Вычитание двух многочленов"""
         result = Polynomial(self.terms.copy())
         for deg, coef in other.terms.items():

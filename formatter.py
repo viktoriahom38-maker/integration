@@ -2,7 +2,7 @@ from typing import List, Tuple
 from fraction import Fraction
 
 
-def format_output(original_expr: str, result, variable: str):
+def format_output(original_expr: str, result: str | Tuple[List, List], variable: str) -> str:
     """
     Формирует итоговую строку вывода интеграла
 
@@ -31,7 +31,7 @@ def format_output(original_expr: str, result, variable: str):
     return f"∫ ({original_expr}) d{variable} = {result_str} + C"
 
 
-def format_elementary_result(terms: list, log_terms: list, variable: str):
+def format_elementary_result(terms: list, log_terms: list, variable: str) -> str:
     """Форматирует результат для элементарных функций"""
     parts = []
     for coef, func in terms:
@@ -77,7 +77,7 @@ def format_elementary_result(terms: list, log_terms: list, variable: str):
     return result
 
 
-def format_integral_result(terms: List[Tuple[Fraction, int]], log_terms: List[Tuple[Fraction, str]], variable: str):
+def format_integral_result(terms: List[Tuple[Fraction, int]], log_terms: List[Tuple[Fraction, str]], variable: str) -> str:
     """Преобразует списки членов результата в единую строку"""
     parts = []
     terms.sort(key=lambda x: x[1], reverse=True)
@@ -105,7 +105,7 @@ def format_integral_result(terms: List[Tuple[Fraction, int]], log_terms: List[Tu
     return result
 
 
-def format_linear_expression(a: Fraction, b: Fraction, var: str):
+def format_linear_expression(a: Fraction, b: Fraction, var: str) -> str:
     """
     Форматирует линейное выражение ax + b для использования внутри логарифма
 
@@ -135,7 +135,7 @@ def format_linear_expression(a: Fraction, b: Fraction, var: str):
         return f"{a_str}{b}"
 
 
-def _term_to_string(coef: Fraction, degree: int, var: str):
+def _term_to_string(coef: Fraction, degree: int, var: str) -> str:
     """Форматирует один член многочлена Ax^n"""
     if coef.numerator == 0:
         return ""
@@ -165,7 +165,7 @@ def _term_to_string(coef: Fraction, degree: int, var: str):
     return f"{sign}{c_part}{v_part}"
 
 
-def _log_to_string(coef: Fraction, arg: str):
+def _log_to_string(coef: Fraction, arg: str) -> str:
     """Форматирует логарифмический член K*ln|Arg|"""
     sign = "-" if coef.numerator < 0 else ""
     abs_n = abs(coef.numerator)

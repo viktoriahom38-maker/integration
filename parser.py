@@ -1,9 +1,10 @@
 import re
 from polynomial import Polynomial
 from fraction import Fraction
+from typing import List, Tuple
 
 
-def preprocess(expression: str, variable: str):
+def preprocess(expression: str, variable: str) -> str:
     """
     Удаляет пробелы и расставляет явные знаки умножения
 
@@ -25,7 +26,7 @@ def preprocess(expression: str, variable: str):
     return expr
 
 
-def parse_to_polynomials(expression: str, variable: str):
+def parse_to_polynomials(expression: str, variable: str) -> Tuple[Polynomial, Polynomial]:
     """
     Парсит строку в объекты Polynomial для числителя и знаменателя
 
@@ -48,7 +49,7 @@ def parse_to_polynomials(expression: str, variable: str):
     return num_poly, den_poly
 
 
-def tokenize(expression: str, variable: str):
+def tokenize(expression: str, variable: str) -> List[str]:
     """
     Разбивает строку выражения на токены
 
@@ -90,7 +91,7 @@ def tokenize(expression: str, variable: str):
     return tokens
 
 
-def build_polynomial_from_expr(expr: str, variable: str):
+def build_polynomial_from_expr(expr: str, variable: str) -> Polynomial:
     """
     Рекурсивно парсит выражение в объект Polynomial
 
@@ -105,7 +106,8 @@ def build_polynomial_from_expr(expr: str, variable: str):
     tokens = tokenize(expr, variable)
     pos = 0
 
-    def parse_expr():
+    def parse_expr() -> Polynomial:
+        """Парсит выражение с операторами сложения и вычитания"""
         nonlocal pos
         left = parse_term()
         while pos < len(tokens) and tokens[pos] in '+-':
@@ -118,7 +120,8 @@ def build_polynomial_from_expr(expr: str, variable: str):
                 left = left - right
         return left
 
-    def parse_term():
+    def parse_term() -> Polynomial:
+        """Парсит терм с операторами умножения"""
         nonlocal pos
         left = parse_factor()
         while pos < len(tokens) and tokens[pos] == '*':
@@ -127,7 +130,8 @@ def build_polynomial_from_expr(expr: str, variable: str):
             left = left * right
         return left
 
-    def parse_factor():
+    def parse_factor() -> Polynomial:
+        """Парсит множитель: число, переменную, выражение в скобках или дробь"""
         nonlocal pos
         if pos >= len(tokens):
             return Polynomial({0: 0})
